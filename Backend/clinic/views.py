@@ -1,15 +1,17 @@
 from rest_framework import generics
-from .models import Clinic
-from .serializers import ClinicSerializer
+from rest_framework.permissions import IsAuthenticated
+from .models import Clinic,Doctor
+from .serializers import ClinicSerializer,DoctorSerializer
 
 # Create a new clinic
-class ClinicAPIView(generics.CreateAPIView):
-    queryset = Clinic.objects.all()
+class ClinicAPIView(generics.ListCreateAPIView):
+    # queryset = Clinic.objects.all()
+    permission_classes=[IsAuthenticated]
     serializer_class = ClinicSerializer
+    def get_queryset(self):
+        clinic= Clinic.objects.filter(user=self.request.clinic)
+        return clinic
 
-
-from .models import Doctor
-from .serializers import DoctorSerializer
 
 
 # List all doctors

@@ -6,6 +6,7 @@ from accounts.models import Accounts
 
 
 class Clinic(models.Model):
+    clinic = models.OneToOneField(Accounts, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     address = models.TextField()
