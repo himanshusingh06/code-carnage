@@ -162,7 +162,7 @@ console.log(companyName)
         />
       )}
       {activeNavItem === 'Doctor' && (
-        <JobListingsDashboard jobOpportunities={clinicData?.job_opportunities || []} />
+        <JobListingsDashboard jobOpportunities={clinicData?.doctors || []} />
       )}
       {activeNavItem === 'Appointments' && (
         <AddJobOpportunity />
