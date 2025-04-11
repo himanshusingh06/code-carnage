@@ -8,14 +8,19 @@ class DoctorSerializer(serializers.ModelSerializer):
 class ClinicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clinic
-        fields = '__all__'
+        fields = ['id', 'clinic', 'name', 'description', 'address', 'created_at']
+        read_only_fields = ['id', 'clinic', 'created_at']
+
+    def validate(self, attrs):
+        # Add field validation if needed (optional)
+        return attrs
 
 
-class DoctorSerializer(serializers.ModelSerializer):
+# class DoctorSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = Doctor
-        fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'available_days', 'created_at']
+#     class Meta:
+#         model = Doctor
+#         fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'available_days', 'created_at']
 
 
 class PatientSerializer(serializers.ModelSerializer):
