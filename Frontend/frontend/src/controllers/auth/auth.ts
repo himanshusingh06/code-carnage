@@ -17,12 +17,10 @@ interface LoginData {
 }
 
 // Define the type for company registration data
-interface CompanyData {
-  company_name: string;
-  industry: string;
-  company_size: string; // Should match the choices defined in constants
-  location: string;
-  website?: string; // Optional field
+interface ClinicData {
+  name: string;
+  description: string;
+  address: string; 
 }
 
 interface StudentData {
@@ -66,9 +64,9 @@ export const loginUser = async (loginData: LoginData) => {
 };
 
 // Function to register a company
-export const registerCompany = async (companyData: CompanyData, accessToken: string) => {
+export const registerClinic = async (ClinicData: ClinicData , accessToken: string) => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/hirer/register/', companyData, {
+    const response = await axios.post('http://127.0.0.1:8000/clinic/create/', ClinicData, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },

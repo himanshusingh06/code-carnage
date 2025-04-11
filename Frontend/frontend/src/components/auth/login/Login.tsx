@@ -85,7 +85,7 @@ function Login() {
                   id="username" 
                   name="username"
                   className="input-field" 
-                  placeholder="Email"
+                  placeholder="username"
                   value={formData.username} 
                   onChange={handleChange} 
                   required 
