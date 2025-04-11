@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import { getHirerData } from '../../controllers/hirer/hirer';
+import { getClinicData } from '../../controllers/hirer/hirer';
 import { useNavigate } from 'react-router-dom'; 
 import { BsHouseDoor, BsListUl, BsEnvelope, BsPerson, BsClipboardData, BsPencilSquare, BsGrid, BsQuestionCircle, BsCardImage } from 'react-icons/bs';
 import Dashboard from '../../components/Dashboard/Dashboard';
@@ -8,8 +8,8 @@ import JobListingsDashboard from '../../components/JobListing/JobListing';
 import AddJobOpportunity from '../Dashboard/Dashboard'
 
 const Home: React.FC = () => {
-  const [hirerData, setHirerData] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  const [clinicData, setclinicData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); 
   const accessToken = localStorage.getItem('accessToken'); 
 
@@ -63,35 +63,40 @@ const Home: React.FC = () => {
     }
   ]);
 
-  // useEffect(() => {
-  //   const fetchHirerData = async () => {
-  //     if (!accessToken) {
-  //       console.log("Access token not found, redirecting to login.");
-  //       navigate('/accounts/login');
-  //       return;
-  //     }
+  useEffect(() => {
+    const fetchclinicData = async () => {
+      if (!accessToken) {
+        console.log("Access token not found, redirecting to login.");
+        navigate('/accounts/login');
+        return;
+      }
 
-  //     try {
-  //       const data = await getHirerData(accessToken); 
-  //       setHirerData(data); 
-  //       setCompanyName(data.company_name);
-  //       setAccountType(data.industry);
-  //       setActiveListings(data.job_opportunities ? data.job_opportunities.length : 0); 
-  //       setTotalListing(data.job_opportunities ? data.job_opportunities.length : 0); 
-  //     } catch (error) {
-  //       if (error.response && error.response.status === 404) {
-  //         console.log("Hirer data not found, redirecting to company registration.");
-  //         navigate('/accounts/register/company');
-  //       } else {
-  //         console.error("Failed to fetch hirer data:", error);
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+      try {
+        const response = await getClinicData(accessToken);
+        const data = response.data[0] 
+        setclinicData(data); 
+        setCompanyName(data.name);
+        setAccountType(data.account_type);
+        setActiveListings(data.job_opportunities ? data.job_opportunities.length : 0); 
+        setTotalListing(data.job_opportunities ? data.job_opportunities.length : 0); 
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          console.log("Clinic data not found, redirecting to clinic registration.");
+          navigate('/accounts/register/clinic');
+        }else if (error.response && error.response.status === 401){
+          console.log('system logged out, redirecting to login page')
+          navigate('/accounts/login')
+        }
+         else {
+          console.error("Failed to fetch hirer data:", error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchHirerData(); 
-  // }, [accessToken, navigate]); 
+    fetchclinicData(); 
+  }, [accessToken, navigate]); 
 
   if (loading) {
     return <div>Loading...</div>; 
@@ -106,8 +111,9 @@ const Home: React.FC = () => {
       return (num / 1000).toFixed(1) + 'k';
     }
     return num.toString();
-  };
 
+  };
+console.log(companyName)
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -156,7 +162,7 @@ const Home: React.FC = () => {
         />
       )}
       {activeNavItem === 'Doctor' && (
-        <JobListingsDashboard jobOpportunities={hirerData?.job_opportunities || []} />
+        <JobListingsDashboard jobOpportunities={clinicData?.job_opportunities || []} />
       )}
       {activeNavItem === 'Appointments' && (
         <AddJobOpportunity />

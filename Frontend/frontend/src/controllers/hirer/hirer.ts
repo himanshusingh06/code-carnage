@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { startHiring } from '../../controllers/hirer/hirer'; // Import the startHiring function
 
+export const baseURL = 'http://127.0.0.1:8000' 
+
 // Function to get hirer data and job opportunities
-export const getHirerData = async (accessToken: string) => {
+export const getClinicData = async (accessToken: string) => {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/hirer/all/', {
+    const response = await axios.get(`${baseURL}/clinic/create/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },
