@@ -13,7 +13,7 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-    account_type: "CANDIDATE",
+    account_type: "DOCTOR",
   });
 
   const [loading, setLoading] = useState(false);
@@ -54,11 +54,7 @@ function Register() {
         console.log("email not verified!! redirecting to verify email page")
       }
       else{
-        if (formData.account_type === 'CANDIDATE') {
-          navigate('/accounts/register/candidate');
-        } else {
-          navigate('/accounts/register/company');
-        }
+          navigate('/accounts/register/clinic');
       }
     } catch (error) {
       console.error("Registration or login failed:", error);
@@ -90,8 +86,8 @@ function Register() {
                 value={formData.account_type}
                 onChange={handleChange}
               >
-                <option value="CANDIDATE">Candidate</option>
-                <option value="HIRER">Company</option>
+                <option value="PATIENT">PATIENT</option>
+                <option value="DOCTOR">DOCTOR</option>
               </select>
             </div>
 

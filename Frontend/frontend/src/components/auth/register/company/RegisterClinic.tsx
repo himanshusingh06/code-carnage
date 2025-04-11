@@ -5,7 +5,7 @@ import { registerCompany } from "../../../../controllers/auth/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function RegisterCompany() {
+function RegisterClinic() {
   const [formData, setFormData] = useState({
     company_name: "",
     industry: "",
@@ -191,4 +191,4 @@ function RegisterCompany() {
   );
 }
 
-export default RegisterCompany;
+export default RegisterClinic;
