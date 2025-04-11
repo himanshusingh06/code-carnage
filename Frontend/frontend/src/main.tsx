@@ -5,14 +5,21 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout";
 import RegisterAccount from "./components/auth/register/account/RegisterAccount";
 import Verify from "./components/auth/verify/Verify";
-import RegisterCompany from "./components/auth/register/company/RegisterCompany";
 import Login from "./components/auth/login/Login";
+import Home from "./components/Home/Home";
+import RegisterClinic from "./components/auth/register/company/RegisterClinic";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    children: [
+      {
+        path: "home",
+        element: <Home />,
+      },
+    ],
   },
   {
     path: "/accounts/",
@@ -26,18 +33,20 @@ const router = createBrowserRouter([
         path: "register/verify",
         element: <Verify />,
       },
+      {
+        path: "register/clinic/",
+        element: <RegisterClinic />,
+      },
       // {
-      //   path: "register/company",
-      //   element: <RegisterCompany />,
+      //   path: "register/candidate/",
+      //   element: <RegisterCandidate />,
       // },
       {
-        path: "login",
+        path: "login/",
         element: <Login />,
       },
     ],
-  },
-
-
+  }
 ]);
 
 createRoot(document.getElementById("root")!).render(
