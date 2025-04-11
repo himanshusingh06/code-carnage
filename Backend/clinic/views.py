@@ -4,6 +4,7 @@ from .models import Clinic,Doctor
 from .serializers import ClinicSerializer,DoctorSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from accounts.models import Accounts
 
 # Create a new clinic
 class ClinicAPIView(generics.ListCreateAPIView):
@@ -16,6 +17,9 @@ class ClinicAPIView(generics.ListCreateAPIView):
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
+        serialized_data = serializer.data
+        for item in serialized_data:
+            item['account_type'] = request.user.account_type
         return Response({
             "message": "success",
             "data": serializer.data
