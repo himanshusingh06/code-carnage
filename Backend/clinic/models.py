@@ -68,7 +68,19 @@ class Prescription(models.Model):
     tests = models.TextField()
     medications = models.TextField(help_text="List of medications prescribed")
     instructions = models.TextField(blank=True)
+    followup = models.BooleanField(default=False)
     issued_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Prescription {self.id} - {self.patient.user.username}"
+
+
+
+class Log(models.Model):
+    user = models.ForeignKey(Accounts, on_delete=models.CASCADE, related_name='logs')
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE, related_name='logs')
+    side_effect = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Log by {self.user.username} for Prescription {self.prescription.id}"

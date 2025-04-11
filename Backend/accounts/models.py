@@ -18,3 +18,13 @@ class Accounts(AbstractUser):
 
     def __str__(self):
         return f"{self.id}" 
+    
+
+
+
+
+
+# i want an api to create and list client using listcreateviewapi provide serializer.py 
+# dont put any ligic in serializers like create() only validate fields provide views.py use perform_create() for business logic and db interaction and error handling in create () only validate and return custom response in the format {"messge": "successfull", "data" : {}}
+
+# also provide urls.py for the same
