@@ -3,7 +3,7 @@ from .models import Clinic, Doctor, Patient, Appointment, Prescription
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'available_days', 'created_at']
+        fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'availability', 'available_days', 'created_at']
         read_only_fields = ['id', 'created_at']
 
 class ClinicSerializer(serializers.ModelSerializer):
@@ -26,22 +26,13 @@ class PatientSerializer(serializers.ModelSerializer):
         fields = ['id', 'patient', 'age', 'gender', 'address', 'phone']
 
 
+
 class AppointmentSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer(read_only=True)
-    doctor = DoctorSerializer(read_only=True)
-    clinic = ClinicSerializer(read_only=True)
-
-    patient_id = serializers.PrimaryKeyRelatedField(queryset=Patient.objects.all(), source='patient', write_only=True)
-    doctor_id = serializers.PrimaryKeyRelatedField(queryset=Doctor.objects.all(), source='doctor', write_only=True)
-    clinic_id = serializers.PrimaryKeyRelatedField(queryset=Clinic.objects.all(), source='clinic', write_only=True)
-
     class Meta:
         model = Appointment
-        fields = [
-            'id', 'patient', 'doctor', 'clinic',
-            'patient_id', 'doctor_id', 'clinic_id',
-            'appointment_date', 'reason', 'is_completed', 'created_at'
-        ]
+        fields = ['id', 'patient', 'doctor', 'clinic', 'appointment_date', 'reason', 'is_completed', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
 
 
 class PrescriptionSerializer(serializers.ModelSerializer):
