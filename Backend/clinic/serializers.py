@@ -3,7 +3,8 @@ from .models import Clinic, Doctor, Patient, Appointment, Prescription
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = '__all__'
+        fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'available_days', 'created_at']
+        read_only_fields = ['id', 'created_at']
 
 class ClinicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,11 +17,7 @@ class ClinicSerializer(serializers.ModelSerializer):
         return attrs
 
 
-# class DoctorSerializer(serializers.ModelSerializer):
 
-#     class Meta:
-#         model = Doctor
-#         fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'available_days', 'created_at']
 
 
 class PatientSerializer(serializers.ModelSerializer):
