@@ -9,7 +9,8 @@ class ClinicAPIView(generics.ListCreateAPIView):
     permission_classes=[IsAuthenticated]
     serializer_class = ClinicSerializer
     def get_queryset(self):
-        clinic= Clinic.objects.filter(user=self.request.clinic)
+        print(self.request)
+        clinic= Clinic.objects.filter(clinic=self.request.user)
         return clinic
 
 

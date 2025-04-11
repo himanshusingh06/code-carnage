@@ -8,7 +8,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 class ClinicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clinic
-        fields = '__all__'
+        fields = ['name','description','address']
 
 
 class DoctorSerializer(serializers.ModelSerializer):
