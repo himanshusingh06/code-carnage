@@ -86,7 +86,7 @@ function Register() {
                 value={formData.account_type}
                 onChange={handleChange}
               >
-                <option value="PATIENT">PATIENT</option>
+                <option value="CLINIC">CLINIC</option>
                 <option value="DOCTOR">DOCTOR</option>
               </select>
             </div>

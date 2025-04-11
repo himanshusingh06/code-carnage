@@ -1,2 +1,60 @@
-.venv
-./db.sqlite3
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.env
+*.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# VSCode
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Virtualenv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ENV Files
+.env
+.env.*
+
+# Migrations
+**/migrations/*.py
+**/migrations/__pycache__/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# JetBrains IDEs
+.idea/
+
+# Other
+*.sqlite3

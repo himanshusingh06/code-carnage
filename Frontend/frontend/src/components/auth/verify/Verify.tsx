@@ -68,10 +68,12 @@ function Verify() {
       toast.success("Email verified successfully!");
       localStorage.setItem('email_verified', "true");
       console.log("updated email_verifeied here");
-      if (account_type == 'Candidate'){
-        navigate("/register/candidate")
+      if (account_type == 'CLINIC'){
+        navigate("/accounts/register/clinic/")
+      }else{
+
+        setTimeout(() => navigate("/home"), 2000);
       }
-      setTimeout(() => navigate("/home"), 2000);
     } catch (error) {
       console.error("Verification failed:", error);
       toast.error("Invalid code. Please try again.");

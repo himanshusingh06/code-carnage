@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./registerCompany.css";
-import { registerCompany } from "../../../../controllers/auth/auth";
+import { registerClinic } from "../../../../controllers/auth/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function RegisterClinic() {
   const [formData, setFormData] = useState({
-    company_name: "",
-    industry: "",
-    company_size: "1-50", // Default value
-    location: "",
-    website: "",
+    name: "",
+    description: "",
+    address: "", 
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,7 +41,7 @@ function RegisterClinic() {
     const accessToken = localStorage.getItem("accessToken"); // Retrieve access token from local storage
 
     try {
-      const response = await registerCompany(formData, accessToken!); // Call the registerCompany function
+      const response = await registerClinic(formData, accessToken!); // Call the RegisterClinic function
       console.log(response);
       toast.success("Company registered successfully!");
       navigate("/home"); // Redirect to the home page after successful registration
@@ -72,10 +70,10 @@ function RegisterClinic() {
               <div className="form-row">
                 <input
                   type="text"
-                  placeholder="Company Name"
+                  placeholder="Name"
                   className="input-field"
-                  name="company_name"
-                  value={formData.company_name}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   required
                 />
@@ -84,16 +82,16 @@ function RegisterClinic() {
               <div className="form-row">
                 <input
                   type="text"
-                  placeholder="Industry"
+                  placeholder="Description"
                   className="input-field"
-                  name="industry"
-                  value={formData.industry}
+                  name="description"
+                  value={formData.description}
                   onChange={handleChange}
                   required
                 />
               </div>
 
-              <div className="form-row">
+              {/* <div className="form-row">
                 <select
                   className="input-field select-field"
                   name="company_size"
@@ -105,21 +103,21 @@ function RegisterClinic() {
                   <option value="101-500">101-500 employees</option>
                   <option value="500+">500+ employees</option>
                 </select>
-              </div>
+              </div> */}
 
               <div className="form-row">
                 <input
                   type="text"
-                  placeholder="Location"
+                  placeholder="Address"
                   className="input-field"
-                  name="location"
-                  value={formData.location}
+                  name="address"
+                  value={formData.address}
                   onChange={handleChange}
                   required
                 />
               </div>
 
-              <div className="form-row">
+              {/* <div className="form-row">
                 <input
                   type="url"
                   placeholder="Website (optional)"
@@ -128,7 +126,7 @@ function RegisterClinic() {
                   value={formData.website}
                   onChange={handleChange}
                 />
-              </div>
+              </div> */}
 
               <div className="terms-text">
                 By creating an account, I agree with the company's{" "}
