@@ -17,7 +17,6 @@ class DoctorListAPIView(generics.ListAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
 
-
 # Create a new doctor
 class DoctorCreateAPIView(generics.CreateAPIView):
     queryset = Doctor.objects.all()
