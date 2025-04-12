@@ -64,27 +64,42 @@ class DoctorListCreateView(ListCreateAPIView):
 
 
     def get_queryset(self):
-        queryset = Doctor.objects.all()
-        if not queryset.exists():
-            raise NotFound(detail="No doctors found.")
-        return queryset
+        user = self.request.user
+
+        if not user.is_authenticated:
+            raise ValidationError({"message": "Authentication required."})
+
+        # If user is a patient
+        if hasattr(user, 'patient'):
+            return Appointment.objects.filter(patient=user.patient)
+
+        # If user is a doctor
+        elif hasattr(user, 'doctor'):
+            return Appointment.objects.filter(doctor=user.doctor)
+
+        # If user is a clinic/admin etc., return all (or customize this)
+        elif user.is_superuser:
+            return Appointment.objects.all()
+
+        else:
+            return Appointment.objects.none()
 
     def perform_create(self, serializer):
+        user = self.request.user
+
         try:
-            user = self.request.user  # assuming request.user is the related Accounts object
-            clinic = Clinic.objects.get(clinic=user)  # getting clinic related to this account
+            # Example logic: the current user is the patient
+            patient = Patient.objects.get(patient=user)
+            doctor_id = self.request.data.get("doctor")
+            doctor = Doctor.objects.get(id=doctor_id)
+            clinic = doctor.clinic  # assuming appointment is at the doctor’s clinic
 
-            serializer.save(doctor=user, clinic=clinic)
+            serializer.save(patient=patient, doctor=doctor, clinic=clinic)
 
-        except Clinic.DoesNotExist:
-            raise ValidationError({"message": "Clinic not found for this account."})
-
-        except IntegrityError as e:
-            raise ValidationError({"message": "Integrity Error", "error": str(e)})
-
-        except ValidationError as e:
-            raise ValidationError({"message": "Validation Error", "error": str(e)})
-
+        except Patient.DoesNotExist:
+            raise ValidationError({"message": "Patient profile not found."})
+        except Doctor.DoesNotExist:
+            raise ValidationError({"message": "Doctor not found."})
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -98,47 +113,33 @@ class DoctorListCreateView(ListCreateAPIView):
 class AppointmentListCreateView(generics.ListCreateAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = self.request.user
-        # Ensure clinic exists for logged-in user
-        clinic = get_object_or_404(Clinic, clinic=user)
-        
-        doc_id = self.request.query_params.get('doc_id', None)
 
-        if doc_id:
-            return Appointment.objects.filter(clinic=clinic, doctor__id=doc_id)
-        return Appointment.objects.filter(clinic=clinic)
-        # if date:
-        #     return Appointment.objects.filter(clinic=clinic, doctor__id=doc_id)
-        # return Appointment.objects.filter(clinic=clinic)
+    def get_queryset(self):
+        return Appointment.objects.select_related('patient', 'doctor', 'clinic').all()
 
     def perform_create(self, serializer):
         try:
-            serializer.save()
+            # Assuming request.user is a clinic or linked to one
+            clinic = getattr(self.request.user, 'clinic', None)
+            if clinic is None:
+                raise Exception("Clinic not found for this user.")
+
+            appointment = serializer.save(clinic=clinic)
+            self.custom_response = Response({
+                "message": "successful",
+                "data": AppointmentSerializer(appointment).data
+            }, status=status.HTTP_201_CREATED)
         except Exception as e:
-            raise serializers.ValidationError({"message": "Failed to create appointment", "error": str(e)})
+            self.custom_response = Response({
+                "message": "error",
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({
-            "message": "successful",
-            "data": serializer.data
-        }, status=status.HTTP_201_CREATED)
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({
-            "message": "successful",
-            "data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-
-
-# views.py
-
+        return self.custom_response
 
 class PrescriptionCreateListView(generics.ListCreateAPIView):
     serializer_class = PrescriptionSerializer
