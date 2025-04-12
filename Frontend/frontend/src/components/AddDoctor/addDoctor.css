@@ -1,0 +1,98 @@
+.form-container {
+    width: 100vw;
+    max-width: 900px;
+    margin: 2rem auto;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .section {
+    border: 2px solid #FFA726;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .section-header {
+    background-color: #FF9800;
+    padding: 15px;
+    cursor: pointer;
+    color: white;
+    transition: background 0.3s;
+  }
+  
+  .section-header:hover {
+    background-color: #FB8C00;
+  }
+  
+  .section-header h2 {
+    margin: 0;
+  }
+  
+  .collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+  }
+  
+  .collapsible-content.open {
+    max-height: 1000px;
+  }
+  
+  .form-row {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    gap: 20px;
+  }
+  
+  .field-label {
+    flex: 1;
+  }
+  
+  .field-label p {
+    margin: 5px 0 0 0;
+    color: #666;
+    font-size: 0.85rem;
+  }
+  
+  input[type="text"],
+  input[type="password"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .submit-btn {
+    display: block;
+    margin: 20px auto 30px auto;
+    padding: 10px 20px;
+    background-color: #FB8C00;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .submit-btn:disabled {
+    background-color: #d7d7d7;
+    cursor: not-allowed;
+  }
+  
+  .submit-btn:hover:not(:disabled) {
+    background-color: #EF6C00;
+  }
+  
+  .success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+  }
+  

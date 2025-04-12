@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { startHiring } from '../../controllers/hirer/hirer'; // Import the startHiring function
 
-export const baseURL = 'http://127.0.0.1:8000' 
+export const baseURL = 'https://ef4c-202-62-70-196.ngrok-free.app/'
 
 // Function to get hirer data and job opportunities
 export const getClinicData = async (accessToken: string) => {

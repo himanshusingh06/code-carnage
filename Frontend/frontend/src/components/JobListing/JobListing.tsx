@@ -3,14 +3,14 @@ import './jobListing.css';
 
 interface JobOpportunity {
   id: number;
-  job_title: string;
-  description: string;
-  salary: number;
-  visibility: string;
-  no_of_openings: number;
-  location: string;
-  test_date_time: string;
-  posted_at: string;
+  doctor: string;
+  clinic: string;
+  name: string;
+  specialization: string;
+  experience: number;
+  availability: boolean;
+  available_days: string;
+  created_at:string;
 }
 
 interface JobListingsDashboardProps {
@@ -35,7 +35,7 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
   };
 
   // Calculate stats for the summary cards
-  const activeListings = jobOpportunities.filter(listing => listing.visibility === 'public').length;
+  const activeListings = jobOpportunities.filter(listing => listing.availability === true).length;
   const pendingReview = jobOpportunities.filter(listing => listing.visibility === 'private').length;
   const totalApplicants = jobOpportunities.reduce((sum, listing) => sum + listing.no_of_openings, 0);
 
@@ -54,7 +54,7 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
   return (
     <div className="job-listings-container">
       <div className="Listing-header">
-      <h1>Your Listings</h1>
+      <h1>Associated Doctors</h1>
         <div className="search-new">
           <div className="search-bar">
             <input type="text" placeholder="Search listings..." />
@@ -67,7 +67,7 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
 
       <div className="listings-table">
         <div className="table-header">
-          <div className="col position">POSITION</div>
+          <div className="col position">Name</div>
           <div className="col status">STATUS</div>
           <div className="col views">SALARY</div>
           <div className="col applicants">OPENINGS</div>
@@ -78,19 +78,19 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
         {currentListings.map((listing) => (
           <div className="table-row" key={listing.id}>
             <div className="row position">
-              <div className="position-title">{listing.job_title}</div>
+              <div className="position-title">{listing.name}</div>
               <div className="position-details">
-                {listing.description} • {listing.location}
+                {listing.specialization} • Bengalore
               </div>
             </div>
             <div className="col status">
-              <span className={`status-badge ${listing.visibility.toLowerCase()} ${listing.visibility==='public' ? "active" : "pending"}`}>
-                {listing.visibility}
+            <span className={`status-badge ${listing.availability ? "active" : "pending"}`}>
+                {listing.availability ? "Available" : "Unavailable"}
               </span>
             </div>
-            <div className="col views">{listing.salary.toLocaleString()}</div>
-            <div className="col applicants">{listing.no_of_openings}</div>
-            <div className="col posted-date">{formatDate(listing.posted_at)}</div>
+            <div className="col views">{listing.experience.toLocaleString()}</div>
+            <div className="col applicants">{listing.available_days}</div>
+            <div className="col posted-date">{formatDate(listing.created_at)}</div>
             <div className="col actions">
               <button className="edit-btn">Edit</button>
               <button className="delete-btn" onClick={() => deleteListing(listing.id)}>Delete</button>
@@ -131,11 +131,11 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
       <div className="summary-cards">
         <div className="summary-card">
           <div className="card-number total">{jobOpportunities.length}</div>
-          <div className="card-label">Total Listings</div>
+          <div className="card-label">Total Doctors</div>
         </div>
         <div className="summary-card">
           <div className="card-number active">{activeListings}</div>
-          <div className="card-label">Active Listings</div>
+          <div className="card-label">Available Doctors</div>
         </div>
         <div className="summary-card">
           <div className="card-number pending">{pendingReview}</div>

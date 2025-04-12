@@ -6,6 +6,7 @@ import { BsHouseDoor, BsListUl, BsEnvelope, BsPerson, BsClipboardData, BsPencilS
 import Dashboard from '../../components/Dashboard/Dashboard';
 import JobListingsDashboard from '../../components/JobListing/JobListing';
 import AddJobOpportunity from '../Dashboard/Dashboard'
+import AddDoctor from '../AddDoctor/AddDoctor';
 
 const Home: React.FC = () => {
   const [clinicData, setclinicData] = useState<any>(null);
@@ -130,7 +131,7 @@ console.log(companyName)
         
         <nav className="sidebar-nav">
           <ul>
-            {['Dashboard', 'Doctor',"Appointments"].map((item) => (
+            {['Dashboard', 'Doctor','Add Doctor',"Appointments"].map((item) => (
               <li 
                 key={item} 
                 className={activeNavItem === item ? 'active' : ''}
@@ -162,10 +163,16 @@ console.log(companyName)
         />
       )}
       {activeNavItem === 'Doctor' && (
-        <JobListingsDashboard jobOpportunities={clinicData?.job_opportunities || []} />
+        <JobListingsDashboard jobOpportunities={clinicData?.doctors || []} />
       )}
       {activeNavItem === 'Appointments' && (
-        <AddJobOpportunity />
+        <AddJobOpportunity jobopportunities={clinicData?.doctors || []} />
+      )}
+      {activeNavItem === 'Add Doctor' && (
+        <div className="add-doctor-container">
+          <AddDoctor />
+          
+        </div>
       )}
     </div>
   );
