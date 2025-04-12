@@ -41,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         {/* Listings Summary Card */}
         <div className="listings-summary-card">
           <div className="card-header">
-            <h3>Your Listings</h3>
+            <h3>Total Associated Doctors</h3>
             <span className="icon"><BsClipboardData /></span>
           </div>
           <div className="listings-stats">
@@ -51,6 +51,7 @@ const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
         </div>
+
 
         {/* Performance Overview Card */}
         <div className="performance-card">

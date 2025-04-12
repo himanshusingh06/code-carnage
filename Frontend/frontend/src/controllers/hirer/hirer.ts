@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { startHiring } from '../../controllers/hirer/hirer'; // Import the startHiring function
 
-export const baseURL = 'https://ef4c-202-62-70-196.ngrok-free.app/'
+// export const baseURL = 'https://81e3-202-62-70-196.ngrok-free.app/'
+export const baseURL = 'http://127.0.0.1:8000/'
 
 // Function to get hirer data and job opportunities
 export const getClinicData = async (accessToken: string) => {
   try {
-    const response = await axios.get(`${baseURL}/clinic/create/`, {
+    const response = await axios.get(`${baseURL}clinic/create/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },
