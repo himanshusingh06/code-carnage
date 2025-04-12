@@ -66,9 +66,9 @@ const AddDoctor: React.FC = () => {
       const data = {
         ...doctorData,
         availibility: true, // default
-        clinic: "default_from_user_context" // backend should extract from user
       };
-      await registerDoctor(data, accessToken);
+      console.log(data)
+      await registerDoctor(data);
       toast.success("Doctor registered successfully!");
     } catch (err) {
       toast.error("Doctor registration failed.");

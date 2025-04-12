@@ -59,19 +59,17 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
           <div className="search-bar">
             <input type="text" placeholder="Search listings..." />
           </div>
-          <button className="new-listing-btn">
-            <span className="plus-icon">+</span> New Listing
-          </button>
+
         </div>
       </div>
 
       <div className="listings-table">
         <div className="table-header">
           <div className="col position">Name</div>
-          <div className="col status">STATUS</div>
-          <div className="col views">SALARY</div>
-          <div className="col applicants">OPENINGS</div>
-          <div className="col posted-date">POSTED DATE</div>
+          <div className="col status">Status</div>
+          <div className="col views">Experience</div>
+          <div className="col applicants">Available</div>
+          <div className="col posted-date">Joined from</div>
           <div className="col actions">ACTIONS</div>
         </div>
 
@@ -88,7 +86,7 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
                 {listing.availability ? "Available" : "Unavailable"}
               </span>
             </div>
-            <div className="col views">{listing.experience.toLocaleString()}</div>
+            <div className="col views">{listing.experience.toLocaleString()+ ' Years'}</div>
             <div className="col applicants">{listing.available_days}</div>
             <div className="col posted-date">{formatDate(listing.created_at)}</div>
             <div className="col actions">
