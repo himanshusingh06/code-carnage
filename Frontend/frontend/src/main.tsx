@@ -7,6 +7,7 @@ import RegisterAccount from "./components/auth/register/account/RegisterAccount"
 import Verify from "./components/auth/verify/Verify";
 import RegisterCompany from "./components/auth/register/company/RegisterCompany";
 import Login from "./components/auth/login/Login";
+import DocListing from "./components/Doclisting/DocListing";
 
 
 const router = createBrowserRouter([
@@ -35,6 +36,18 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    path: 'clinic/',
+    element:<Layout/>,
+
+    children:[
+      {
+        path: 'doclisting/',
+        element: <DocListing/>,
+
+      }
+    ]
   },
 
 
