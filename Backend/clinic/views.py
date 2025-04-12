@@ -10,7 +10,9 @@ from rest_framework.generics import ListCreateAPIView
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-
+from rest_framework.decorators import api_view, permission_classes
+from langchain_google_genai import ChatGoogleGenerativeAI
+import markdown2
 # Create a new clinic
 class ClinicAPIView(generics.ListCreateAPIView):
     serializer_class = ClinicSerializer
@@ -192,11 +194,7 @@ class PrescriptionCreateListView(generics.ListCreateAPIView):
 
 
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from langchain_google_genai import ChatGoogleGenerativeAI
-import markdown2
+
 
 GOOGLE_API_KEY = 'AIzaSyDkS1WQkQaqgUOA-NoY2YbRbEX4c16_Ads'  # Replace with your real key
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=GOOGLE_API_KEY)
