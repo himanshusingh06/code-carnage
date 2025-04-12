@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+// export const baseURL = 'https://81e3-202-62-70-196.ngrok-free.app/'
+export const baseURL = 'http://127.0.0.1:8000/'
 // Define the type for user data
 interface UserData {
   first_name: string;
@@ -10,6 +12,15 @@ interface UserData {
   password: string;
 }
 
+interface DoctorData{
+  name: string;
+  specialization:string;
+  experience:string;
+  availibility:boolean;
+  available_days:string;
+
+}
+
 // Define the type for login data
 interface LoginData {
   username: string;
@@ -17,12 +28,10 @@ interface LoginData {
 }
 
 // Define the type for company registration data
-interface CompanyData {
-  company_name: string;
-  industry: string;
-  company_size: string; // Should match the choices defined in constants
-  location: string;
-  website?: string; // Optional field
+interface ClinicData {
+  name: string;
+  description: string;
+  address: string; 
 }
 
 interface StudentData {
@@ -46,7 +55,7 @@ interface verifyEmailData{
 // Function to register a user
 export const registerUser = async (userData: UserData) => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/accounts/register/', userData);
+    const response = await axios.post(  `${baseURL}accounts/register/`, userData);
     return response.data; 
   } catch (error) {
     console.error("Registration error:", error);
@@ -54,10 +63,21 @@ export const registerUser = async (userData: UserData) => {
   }
 };
 
+export const registerDoctor = async (doctorData: DoctorData) => {
+  try{
+    const response = await axios.post(`${baseURL}clinic/doctor/`,doctorData);
+    return response;
+   }catch(error){
+      console.error("Doctor Registation error",error);
+      throw error;
+    }
+  }
+
+
 // Function to log in a user
 export const loginUser = async (loginData: LoginData) => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/accounts/login/', loginData);
+    const response = await axios.post(`${baseURL}/accounts/login/`, loginData);
     return response.data; 
   } catch (error) {
     console.error("Login error:", error);
@@ -66,9 +86,9 @@ export const loginUser = async (loginData: LoginData) => {
 };
 
 // Function to register a company
-export const registerCompany = async (companyData: CompanyData, accessToken: string) => {
+export const registerClinic = async (ClinicData: ClinicData , accessToken: string) => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/hirer/register/', companyData, {
+    const response = await axios.post(`${baseURL}/clinic/create/`, ClinicData, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },
@@ -82,7 +102,7 @@ export const registerCompany = async (companyData: CompanyData, accessToken: str
 
 export const registerStudent = async (StudentData: StudentData, accessToken: string) => {
   try {
-    const response = await axios.post('http://127.0.0.1:8000/hirer/register/', StudentData, {
+    const response = await axios.post(`${baseURL}/hirer/register/`, StudentData, {
       headers: {
         Authorization: `Bearer ${accessToken}`, 
       },
@@ -97,7 +117,7 @@ export const registerStudent = async (StudentData: StudentData, accessToken: str
 
 export const verifyEmail = async (verifyEmailData: verifyEmailData, accessToken: string) => {
   try {
-    const response = await axios.put('http://127.0.0.1:8000/accounts/verify-email/', verifyEmailData, {
+    const response = await axios.put(`${baseURL}/accounts/verify-email/`, verifyEmailData, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
