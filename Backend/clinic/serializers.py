@@ -80,3 +80,13 @@ class PrescriptionSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'issued_at', 'doctor', 'patient','appointment']
 
+
+
+
+
+
+# from rest_framework import serializers
+
+# class DrugSideEffectSerializer(serializers.Serializer):
+#     drug_name = serializers.CharField()
+#     adverse_side_effect = serializers.CharField()

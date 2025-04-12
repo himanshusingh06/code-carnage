@@ -187,3 +187,41 @@ class PrescriptionCreateListView(generics.ListCreateAPIView):
                 "message": "Failed to create prescription",
                 "error": str(e)
             }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from langchain_google_genai import ChatGoogleGenerativeAI
+import markdown2
+
+GOOGLE_API_KEY = 'AIzaSyDkS1WQkQaqgUOA-NoY2YbRbEX4c16_Ads'  # Replace with your real key
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=GOOGLE_API_KEY)
+
+def to_markdown(text):
+    """Convert markdown-style text to HTML."""
+    text = text.replace('•', '*')  # Normalize bullet points
+    return markdown2.markdown(text)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_side_effects(request):
+    medicine_name = request.GET.get('medicine')
+
+    if not medicine_name:
+        return Response({'error': 'Medicine name is required.'}, status=400)
+
+    prompt = (
+        f"List the top 3 adverse side effects of the medicine '{medicine_name}' , Just list down the side effects no need to return any other thing "
+        f"respond in just 10-15 words "
+
+    )
+
+    try:
+        result = llm.invoke(prompt)
+        response_text = to_markdown(result.content)
+        return Response({'medicine': medicine_name, 'side_effects': response_text})
+    except Exception as e:
+        return Response({'error': f"AI response failed: {str(e)}"}, status=500)
