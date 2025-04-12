@@ -24,5 +24,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['user_id'] = self.user.id
         data['email'] = self.user.email
         data['email_verified'] = self.user.email_verified
+        data['account_type'] = self.user.account_type
 
         return data

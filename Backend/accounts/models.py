@@ -16,5 +16,10 @@ class Accounts(AbstractUser):
         self.verification_code = str(random.randint(100000, 999999))
         self.save()
 
-    def __str__(self):
-        return f"{self.id}" 
+ 
+    
+
+
+
+
+
