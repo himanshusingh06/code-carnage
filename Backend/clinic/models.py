@@ -15,7 +15,7 @@ class Clinic(models.Model):
     def __str__(self):
         return self.name
 
-
+# appointment
 class Doctor(models.Model):
     doctor = models.OneToOneField(Accounts, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, related_name='doctors', on_delete=models.CASCADE)
