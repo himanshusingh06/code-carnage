@@ -6,6 +6,7 @@ import { BsHouseDoor, BsListUl, BsEnvelope, BsPerson, BsClipboardData, BsPencilS
 import Dashboard from '../../components/Dashboard/Dashboard';
 import JobListingsDashboard from '../../components/JobListing/JobListing';
 import AddJobOpportunity from '../Dashboard/Dashboard'
+import AppointmentDashboard from '../Appointments/AppointmentDashboard'
 import AddDoctor from '../AddDoctor/AddDoctor';
 
 const Home: React.FC = () => {
@@ -142,6 +143,7 @@ console.log(companyName)
                 {item === 'Appointments' && <BsListUl />}
                 {item === 'Messages' && <BsEnvelope />}
                 {item === 'Profile' && <BsPerson />}
+                {item === 'Add Doctor' && <BsPerson />}
                 <span>{item}</span>
               </li>
             ))}
@@ -166,7 +168,7 @@ console.log(companyName)
         <JobListingsDashboard jobOpportunities={clinicData?.doctors || []} />
       )}
       {activeNavItem === 'Appointments' && (
-        <AddJobOpportunity jobopportunities={clinicData?.doctors || []} />
+        <AppointmentDashboard />
       )}
       {activeNavItem === 'Add Doctor' && (
         <div className="add-doctor-container">

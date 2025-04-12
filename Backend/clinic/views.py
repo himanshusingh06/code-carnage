@@ -61,6 +61,7 @@ class ClinicAPIView(generics.ListCreateAPIView):
 
 class DoctorListCreateView(ListCreateAPIView):
     serializer_class = DoctorSerializer
+    
 
 
     def get_queryset(self):

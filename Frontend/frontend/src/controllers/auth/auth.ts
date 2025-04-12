@@ -13,7 +13,6 @@ interface UserData {
 }
 
 interface DoctorData{
-  clinic : string;
   name: string;
   specialization:string;
   experience:string;
@@ -64,13 +63,9 @@ export const registerUser = async (userData: UserData) => {
   }
 };
 
-export const registerDoctor = async (doctorData: DoctorData,accessToken:string) => {
+export const registerDoctor = async (doctorData: DoctorData) => {
   try{
-    const response = await axios.post(`${baseURL}clinic/doctor/`,doctorData,{
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios.post(`${baseURL}clinic/doctor/`,doctorData);
     return response;
    }catch(error){
       console.error("Doctor Registation error",error);
