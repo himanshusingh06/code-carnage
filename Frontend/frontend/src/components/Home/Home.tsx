@@ -78,8 +78,8 @@ const Home: React.FC = () => {
         setclinicData(data); 
         setCompanyName(data.name);
         setAccountType(data.account_type);
-        setActiveListings(data.job_opportunities ? data.job_opportunities.length : 0); 
-        setTotalListing(data.job_opportunities ? data.job_opportunities.length : 0); 
+        setActiveListings(data.doctors ? data.doctors.length : 0); 
+        setTotalListing(data.doctors ? data.doctors.length : 0); 
       } catch (error) {
         if (error.response && error.response.status === 404) {
           console.log("Clinic data not found, redirecting to clinic registration.");
@@ -171,7 +171,7 @@ console.log(companyName)
       {activeNavItem === 'Add Doctor' && (
         <div className="add-doctor-container">
           <AddDoctor />
-          
+
         </div>
       )}
     </div>

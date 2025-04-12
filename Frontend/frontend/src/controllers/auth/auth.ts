@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const baseURL = 'https://ef4c-202-62-70-196.ngrok-free.app/'
+// export const baseURL = 'https://81e3-202-62-70-196.ngrok-free.app/'
+export const baseURL = 'http://127.0.0.1:8000/'
 // Define the type for user data
 interface UserData {
   first_name: string;
@@ -55,7 +56,7 @@ interface verifyEmailData{
 // Function to register a user
 export const registerUser = async (userData: UserData) => {
   try {
-    const response = await axios.post(  `${baseURL}/accounts/register/`, userData);
+    const response = await axios.post(  `${baseURL}accounts/register/`, userData);
     return response.data; 
   } catch (error) {
     console.error("Registration error:", error);
@@ -65,7 +66,7 @@ export const registerUser = async (userData: UserData) => {
 
 export const registerDoctor = async (doctorData: DoctorData,accessToken:string) => {
   try{
-    const response = await axios.post(`${baseURL}/clinic/doctor/`,doctorData,{
+    const response = await axios.post(`${baseURL}clinic/doctor/`,doctorData,{
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
