@@ -4,7 +4,7 @@ class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = ['id', 'doctor', 'clinic', 'name', 'specialization', 'experience', 'availability', 'available_days', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['id', 'created_at','doctor','clinic']
 
 class ClinicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,20 +36,21 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 
 class PrescriptionSerializer(serializers.ModelSerializer):
-    appointment = AppointmentSerializer(read_only=True)
-    doctor = DoctorSerializer(read_only=True)
-    patient = PatientSerializer(read_only=True)
-
-    appointment_id = serializers.PrimaryKeyRelatedField(queryset=Appointment.objects.all(), source='appointment', write_only=True)
-    doctor_id = serializers.PrimaryKeyRelatedField(queryset=Doctor.objects.all(), source='doctor', write_only=True)
-    patient_id = serializers.PrimaryKeyRelatedField(queryset=Patient.objects.all(), source='patient', write_only=True)
-
     class Meta:
         model = Prescription
         fields = [
-            'id', 'appointment', 'appointment_id',
-            'doctor', 'doctor_id',
-            'patient', 'patient_id',
-            'symptoms', 'diagnosis', 'tests',
-            'medications', 'instructions', 'issued_at'
+            'id',
+            'appointment',
+            'doctor',
+            'patient',
+            'symptoms',
+            'diagnosis',
+            'tests',
+            'medications',
+            'instructions',
+            'followup',
+            'followup_date',
+            'issued_at',
         ]
+        read_only_fields = ['id', 'issued_at', 'doctor', 'patient','appointment']
+

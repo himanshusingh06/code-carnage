@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from .models import Clinic,Doctor,Appointment
-from .serializers import ClinicSerializer,DoctorSerializer,AppointmentSerializer
+from .models import Clinic,Doctor,Appointment,Prescription
+from .serializers import ClinicSerializer,DoctorSerializer,AppointmentSerializer,PrescriptionSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from accounts.models import Accounts
@@ -9,10 +9,7 @@ from rest_framework.exceptions import NotFound,ValidationError
 from rest_framework.generics import ListCreateAPIView
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-
-
-
-
+from django.utils import timezone
 
 # Create a new clinic
 class ClinicAPIView(generics.ListCreateAPIView):
@@ -62,22 +59,31 @@ class ClinicAPIView(generics.ListCreateAPIView):
 
 # List all doctors
 
-
 class DoctorListCreateView(ListCreateAPIView):
     serializer_class = DoctorSerializer
+
 
     def get_queryset(self):
         queryset = Doctor.objects.all()
         if not queryset.exists():
-            from rest_framework.exceptions import NotFound
             raise NotFound(detail="No doctors found.")
         return queryset
 
     def perform_create(self, serializer):
         try:
-            serializer.save()
+            user = self.request.user  # assuming request.user is the related Accounts object
+            clinic = Clinic.objects.get(clinic=user)  # getting clinic related to this account
+
+            serializer.save(doctor=user, clinic=clinic)
+
+        except Clinic.DoesNotExist:
+            raise ValidationError({"message": "Clinic not found for this account."})
+
         except IntegrityError as e:
             raise ValidationError({"message": "Integrity Error", "error": str(e)})
+
+        except ValidationError as e:
+            raise ValidationError({"message": "Validation Error", "error": str(e)})
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -87,10 +93,6 @@ class DoctorListCreateView(ListCreateAPIView):
             "message": "successful",
             "data": serializer.data
         }, status=status.HTTP_201_CREATED)
-
-
-
-
 
 
 class AppointmentListCreateView(generics.ListCreateAPIView):
@@ -106,6 +108,9 @@ class AppointmentListCreateView(generics.ListCreateAPIView):
         if doc_id:
             return Appointment.objects.filter(clinic=clinic, doctor__id=doc_id)
         return Appointment.objects.filter(clinic=clinic)
+        # if date:
+        #     return Appointment.objects.filter(clinic=clinic, doctor__id=doc_id)
+        # return Appointment.objects.filter(clinic=clinic)
 
     def perform_create(self, serializer):
         try:
@@ -129,3 +134,55 @@ class AppointmentListCreateView(generics.ListCreateAPIView):
             "message": "successful",
             "data": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+
+# views.py
+
+
+class PrescriptionCreateListView(generics.ListCreateAPIView):
+    serializer_class = PrescriptionSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Prescription.objects.filter(appointment__clinic__clinic=user)
+
+    def perform_create(self, serializer):
+        appointment = serializer.validated_data['appointment']
+        doctor = appointment.doctor
+        patient = appointment.patient
+
+        prescription = serializer.save(doctor=doctor, patient=patient)
+
+        # Mark appointment as completed
+        appointment.is_completed = True
+        appointment.save()
+
+        # If follow-up is set to True, create a new appointment
+        if prescription.followup and prescription.followup_date:
+            Appointment.objects.create(
+                patient=patient,
+                doctor=doctor,
+                clinic=appointment.clinic,
+                appointment_date=prescription.followup_date,
+                reason="Follow-up appointment",
+                is_completed=False
+            )
+
+        return prescription
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            prescription = self.perform_create(serializer)
+            return Response({
+                "message": "Prescription created successfully",
+                "data": self.get_serializer(prescription).data
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({
+                "message": "Failed to create prescription",
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
