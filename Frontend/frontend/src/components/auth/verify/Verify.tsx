@@ -5,7 +5,12 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { verifyEmail } from '../../../controllers/auth/auth';
 
-function Verify() {
+interface VerifyProps {
+  preventDefaultBehaviour: boolean;
+  customSubmission: (otpCode: string) => Promise<void>;
+}
+
+const Verify: React.FC<VerifyProps> = ({ preventDefaultBehaviour, customSubmission }) => {
   const accessToken = localStorage.getItem('accessToken');
   const email = localStorage.getItem('email');
   const email_verified = localStorage.getItem('email_verified');
@@ -53,7 +58,9 @@ function Verify() {
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    if (preventDefaultBehaviour) {
+      event.preventDefault();
+    }
     const otpCode = otp.join("");
 
     if (otpCode.length !== 6) {
@@ -62,21 +69,9 @@ function Verify() {
     }
 
     try {
-      console.log("Verifying OTP:", otpCode);
-      const response = await verifyEmail({ email: verifyData.email, verification_code: otpCode, user_id:user_id }, accessToken);
-      console.log(response);
-      toast.success("Email verified successfully!");
-      localStorage.setItem('email_verified', "true");
-      console.log("updated email_verifeied here");
-      if (account_type == 'CLINIC'){
-        navigate("/accounts/register/clinic/")
-      }else{
-
-        setTimeout(() => navigate("/home"), 2000);
-      }
+      await customSubmission(otpCode);
     } catch (error) {
-      console.error("Verification failed:", error);
-      toast.error("Invalid code. Please try again.");
+      toast.error("Verification failed. Please try again.");
     }
   };
 
@@ -113,6 +108,6 @@ function Verify() {
       <ToastContainer position="top-right" autoClose={5000} />
     </div>
   );
-}
+};
 
 export default Verify;

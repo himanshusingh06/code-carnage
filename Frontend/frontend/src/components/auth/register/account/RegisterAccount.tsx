@@ -5,7 +5,12 @@ import { registerUser, loginUser } from "../../../../controllers/auth/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Register() {
+interface RegisterProps {
+  account_type?: string;
+  onRegisterSuccess: () => void;
+}
+
+function Register({ account_type, onRegisterSuccess }: RegisterProps) {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -13,18 +18,18 @@ function Register() {
     email: "",
     password: "",
     confirmPassword: "",
-    account_type: "DOCTOR",
+    account_type: account_type || "DOCTOR",
   });
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function handleChange(
-    event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) {
+  const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  }
+    if (name !== "account_type") {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,6 +60,10 @@ function Register() {
       }
       else{
           navigate('/accounts/register/clinic');
+      }
+
+      if (onRegisterSuccess) {
+        onRegisterSuccess();
       }
     } catch (error) {
       console.error("Registration or login failed:", error);

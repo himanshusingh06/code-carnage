@@ -8,8 +8,9 @@ interface JobOpportunity {
   name: string;
   specialization: string;
   experience: number;
+  availability: boolean;
   available_days: string;
-
+  created_at:string;
 }
 
 interface JobListingsDashboardProps {
@@ -34,7 +35,7 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
   };
 
   // Calculate stats for the summary cards
-  const activeListings = jobOpportunities.filter(listing => listing.visibility === 'public').length;
+  const activeListings = jobOpportunities.filter(listing => listing.availability === true).length;
   const pendingReview = jobOpportunities.filter(listing => listing.visibility === 'private').length;
   const totalApplicants = jobOpportunities.reduce((sum, listing) => sum + listing.no_of_openings, 0);
 
@@ -82,11 +83,11 @@ const JobListingsDashboard: React.FC<JobListingsDashboardProps> = ({ jobOpportun
                 {listing.specialization} • Bengalore
               </div>
             </div>
-            {/* <div className="col status">
-              <span className={`status-badge ${listing.visibility.toLowerCase()} ${listing.visibility==='public' ? "active" : "pending"}`}>
-                {listing.visibility}
+            <div className="col status">
+            <span className={`status-badge ${listing.availability ? "active" : "pending"}`}>
+                {listing.availability ? "Available" : "Unavailable"}
               </span>
-            </div> */}
+            </div>
             <div className="col views">{listing.experience.toLocaleString()}</div>
             <div className="col applicants">{listing.available_days}</div>
             <div className="col posted-date">{formatDate(listing.created_at)}</div>
